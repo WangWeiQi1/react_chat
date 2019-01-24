@@ -12,6 +12,9 @@ import {
 import Login from './container/login'
 import Register from './container/register'
 import AuthRoute from './components/authroute'
+import BossInfo from './container/bossinfo'
+import GeniusInfo from './container/geniusinfo'
+import DashBoard from './components/dashboard'
 
 class App extends React.Component {
 	render() {
@@ -20,8 +23,13 @@ class App extends React.Component {
 				<Router>
 					<div>
 						<AuthRoute />
-						<Route path='/login' component={Login} />
-						<Route path='/register' component={Register} />
+						<Switch>
+							<Route path='/bossinfo' component={BossInfo} />
+							<Route path='/geniusinfo' component={GeniusInfo} />
+							<Route path='/login' component={Login} />
+							<Route path='/register' component={Register} />
+							<Route component={DashBoard} />
+						</Switch>
 					</div>
 				</Router>
 			</Provider>

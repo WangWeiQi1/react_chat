@@ -4,7 +4,6 @@ import Logo from '../../components/logo'
 import {
 	List,
 	InputItem,
-	WingBlank,
 	WhiteSpace,
 	Button,
 	Radio

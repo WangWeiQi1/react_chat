@@ -3,6 +3,8 @@ import axios from 'axios'
 import {
 	withRouter
 } from 'react-router-dom'
+import { connect } from 'react-redux'
+import * as actionCreators from '../../redux/user.redux'
 
 class AuthRoute extends React.Component {
 	componentDidMount() {
@@ -14,7 +16,7 @@ class AuthRoute extends React.Component {
 		//获取用户信息
 		axios.get('/user/info').then(res => {
 			if (res.status === 200 && res.data.code === 0) {
-
+				this.props.loadData(res.data.data);
 			} else {
 				this.props.history.push('/login');
 			}
@@ -25,4 +27,15 @@ class AuthRoute extends React.Component {
 	}
 }
 
-export default withRouter(AuthRoute);
+const mapDispatchToProps = (dispatch) => {
+	return {
+		loadData(data) {
+			dispatch(actionCreators.userInfo(data))
+		}
+	}
+}
+
+export default connect(
+	null,
+	mapDispatchToProps
+)(withRouter(AuthRoute));

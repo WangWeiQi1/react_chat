@@ -8,9 +8,58 @@ const model = require('./model');
 
 const User = model.getModel('user');
 
+const _filter = {pwd: 0, __v: 0}
+
 Router.get('/list', (req,res) => {
-	User.find({}, (err, doc) => {
-		return res.json(doc)
+	const type = req.query.type;
+	// User.remove({},(e,d) => {})
+	User.find({type}, (err, doc) => {
+		return res.json({code: 0,data: doc})
+	})
+})
+
+Router.post('/updateInfo', (req,res) => {
+	const id = req.cookies.userId;
+	const body = req.body;
+	if(!id) {
+		return res.json({code: 1, msg: '未登录'})
+	}
+	User.findByIdAndUpdate(id,body,(err, doc) => {
+		if(err) {
+			return res.json({
+				code: 2,
+				msg: '服务器好像发生了点小问题'
+			});
+		}
+		const data = Object.assign({},{
+			user: doc.user,
+			type: doc.type
+		},body)
+		return res.json({code: 0, data: data})
+	})
+})
+
+Router.post('/login', (req,res) => {
+	const {user, pwd} = req.body;
+	User.findOne({user: user}, (err, doc) => {
+		if(!doc) {
+			return res.json({
+				code: 1,
+				msg: '用户名不存在'
+			})
+		}
+		if(md5Pwd(pwd) !== doc.pwd) {
+			return res.json({
+				code: 2,
+				msg: '请检查您的密码'
+			})
+		}
+		res.cookie('userId', doc._id);
+		return res.json({
+			code: 0,
+			data: doc,
+			msg: '登陆成功'
+		})
 	})
 })
 
@@ -23,15 +72,22 @@ Router.post('/register', (req,res) => {
 				msg: '用户名重复'
 			})
 		}
-		User.create({user,pwd: md5Pwd(pwd),type}, (err,doc) => {
+		new User({
+			user,
+			pwd: md5Pwd(pwd),
+			type
+		}).save((err, doc) => {
 			if(err) {
 				return res.json({
 					code: 2,
 					msg: '服务器好像发生了点小问题'
 				});
 			}
+			const { user, type, _id } = doc;
+			res.cookie('userId', _id);
 			return res.json({
 				code: 0,
+				data: {user, type, _id},
 				msg: '注册成功'
 			})
 		})
@@ -39,8 +95,21 @@ Router.post('/register', (req,res) => {
 })
 
 Router.get('/info', (req, res) => {
-	return res.json({
-		code: 1
+	const { userId } = req.cookies;
+	if(!userId) {
+		return res.json({code: 2, msg: '未登录'});
+	}
+	User.findOne({_id: userId}, _filter, (err, doc) => {
+		if(err) {
+			return res.json({
+				code: 1,
+				msg: '服务器好像发生了点小问题'
+			})
+		}
+		return res.json({
+			code: 0,
+			data: doc
+		})
 	})
 })
 
