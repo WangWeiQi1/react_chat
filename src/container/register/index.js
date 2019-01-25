@@ -11,21 +11,14 @@ import {
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import * as actionCreators from '../../redux/user.redux'
+import imoocForm from '../../components/imooc-form'
 
 class Register extends React.Component {
-	state = {
-		user: '',
-		pwd: '',
-		repeatpwd: '',
-		type: 'genius'
-	}
-	handleChange(key, val) {
-		this.setState({
-			[key]: val
-		})
+	componentDidMount() {
+		this.props.handleChange('type', 'genius');
 	}
 	handleSubmit = () => {
-		this.props.register(this.state)
+		this.props.register(this.props.state)
 	}
 	render() {
 		const RadioItem = Radio.RadioItem;
@@ -36,34 +29,34 @@ class Register extends React.Component {
 				<List>
 					{this.props.user.msg ? <p className="error-msg">{this.props.user.msg}</p> : null}
 					<InputItem
-						onChange={(val) => {this.handleChange('user',val)}}
+						onChange={(val) => {this.props.handleChange('user',val)}}
 					>
 						用户名
 					</InputItem>
 					<WhiteSpace />
 					<InputItem
 						type="password"
-						onChange={(val) => {this.handleChange('pwd',val)}}
+						onChange={(val) => {this.props.handleChange('pwd',val)}}
 					>
 						密码
 					</InputItem>
 					<WhiteSpace />
 					<InputItem
 						type="password"
-						onChange={(val) => {this.handleChange('repeatpwd',val)}}
+						onChange={(val) => {this.props.handleChange('repeatpwd',val)}}
 					>
 						确认密码
 					</InputItem>
 					<WhiteSpace />
 					<RadioItem 
-						onChange={() => {this.handleChange('type','genius')}}
-						checked={this.state.type === 'genius'}
+						onChange={() => {this.props.handleChange('type','genius')}}
+						checked={this.props.state.type === 'genius'}
 					>
 						牛人
 					</RadioItem>
 					<RadioItem 
-						onChange={() => {this.handleChange('type','boss')}}
-						checked={this.state.type === 'boss'}
+						onChange={() => {this.props.handleChange('type','boss')}}
+						checked={this.props.state.type === 'boss'}
 					>
 						BOSS
 					</RadioItem>
@@ -92,4 +85,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(Register);
+)(imoocForm(Register));

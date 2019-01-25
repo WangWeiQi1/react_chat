@@ -10,17 +10,9 @@ import {
 import { connect } from 'react-redux'
 import * as actionCreators from '../../redux/user.redux'
 import { Redirect } from 'react-router-dom'
+import imoocForm from '../../components/imooc-form' //高阶组件
 
 class Login extends React.Component {
-	state = {
-		user: '',
-		pwd: ''
-	}
-	handleChange(key, val) {
-		this.setState({
-			[key]: val
-		})
-	}
 	handleRegister = () => {
 		this.props.history.push('/register');
 	}
@@ -33,20 +25,20 @@ class Login extends React.Component {
 					<List>
 						{this.props.user.msg ? <p className="error-msg">{this.props.user.msg}</p> : null}
 						<InputItem
-							onChange={(val) => {this.handleChange('user',val)}}
+							onChange={(val) => {this.props.handleChange('user',val)}}
 						>
 							用户
 						</InputItem>
 						<WhiteSpace />
 						<InputItem
 							type="password"
-							onChange={(val) => {this.handleChange('pwd',val)}}
+							onChange={(val) => {this.props.handleChange('pwd',val)}}
 						>
 						密码
 						</InputItem>
 					</List>
 					<WhiteSpace />
-					<Button type="primary" onClick={() => this.props.handleLogin(this.state)}>登录</Button>
+					<Button type="primary" onClick={() => this.props.handleLogin(this.props.state)}>登录</Button>
 					<WhiteSpace />
 					<Button onClick={this.handleRegister} type="primary">注册</Button>
 				</WingBlank>
@@ -54,6 +46,7 @@ class Login extends React.Component {
 		)
 	}
 }
+
 
 const mapStateToProps = (state) => {
 	return {
@@ -72,4 +65,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(Login);
+)(imoocForm(Login));

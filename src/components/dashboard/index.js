@@ -6,12 +6,19 @@ import NavLinkBar from '../navlink'
 import Boss from '../boss'
 import Genius from '../genius'
 import User from '../user'
+import * as actionCreators from '../../redux/chat.redux'
 
 function Msg() {
 	return <h2>消息列表</h2>
 }
 
 class DashBoard extends React.Component {
+	componentDidMount() {
+		if(!this.props.chat.chatmsg.length) {
+			this.props.getMsgList();
+			this.props.recvMsg();
+		}
+	}
 	render() {
 		const user = this.props.user;
 		const { pathname } = this.props.location;
@@ -59,7 +66,7 @@ class DashBoard extends React.Component {
 						}
 					</Switch>
 				</div>
-				<NavLinkBar data={navList} />
+				<NavLinkBar className="fixed-footer" data={navList} />
 			</div>
 		)
 	}
@@ -67,11 +74,21 @@ class DashBoard extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
-		user: state.user
+		user: state.user,
+		chat: state.chat
 	}
 }
 
+const mapDispatchToProps = (dispatch) => ({
+	getMsgList() {
+		dispatch(actionCreators.getMsgList())
+	},
+	recvMsg() {
+		dispatch(actionCreators.recvMsg())
+	}
+})
+
 export default connect(
 	mapStateToProps,
-	null
+	mapDispatchToProps
 )(DashBoard);

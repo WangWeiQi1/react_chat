@@ -4,6 +4,8 @@ import { user } from '../redux/user.redux'
 
 import { card } from '../redux/card.redux'
 
-const reducer = combineReducers({user, card});
+import { chat } from '../redux/chat.redux'
+
+const reducer = combineReducers({user, card, chat});
 
 export default reducer;

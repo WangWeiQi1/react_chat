@@ -15,6 +15,7 @@ import AuthRoute from './components/authroute'
 import BossInfo from './container/bossinfo'
 import GeniusInfo from './container/geniusinfo'
 import DashBoard from './components/dashboard'
+import Chat from './components/chat'
 
 class App extends React.Component {
 	render() {
@@ -28,6 +29,7 @@ class App extends React.Component {
 							<Route path='/geniusinfo' component={GeniusInfo} />
 							<Route path='/login' component={Login} />
 							<Route path='/register' component={Register} />
+							<Route path='/chat/:user' component={Chat} />
 							<Route component={DashBoard} />
 						</Switch>
 					</div>
