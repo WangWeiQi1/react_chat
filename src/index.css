@@ -1,3 +1,6 @@
+* {
+	touch-action: none; /*解决移动端滑动preventDefault的bug*/
+}
 .am-tab-bar {
 	position: fixed;
 	bottom: 0;
@@ -20,9 +23,21 @@
 	padding-right: 15px;
 	text-align: right;
 }
+#chat-page .am-flexbox:last-child {
+	margin-bottom: 10px;
+}
 .stick-footer {
 	z-index: 10;
 	position: absolute;
 	bottom: 0;
 	width: 100%;
+}
+.moren {
+	padding-right: 10px;
+	vertical-align: text-top;
+}
+.sendBtn {
+	padding: 5px;
+	background: #108ee9;
+	color: #fff;
 }

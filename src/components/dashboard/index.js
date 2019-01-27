@@ -6,11 +6,8 @@ import NavLinkBar from '../navlink'
 import Boss from '../boss'
 import Genius from '../genius'
 import User from '../user'
+import Msg from '../msg'
 import * as actionCreators from '../../redux/chat.redux'
-
-function Msg() {
-	return <h2>消息列表</h2>
-}
 
 class DashBoard extends React.Component {
 	componentDidMount() {

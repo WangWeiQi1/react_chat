@@ -36,6 +36,21 @@ Router.get('/getMsgList', (req,res) => {
 	})
 })
 
+Router.post('/readMsg', (req,res) => {
+	const userId = req.cookies.userId;
+	const { from } = req.body;
+	Chat.update(
+		{from,to: userId},
+		{'$set': {read: true}}, 
+		{'multi': true}, //加上这个可以更新多行 否则只更新一行
+		(err,doc) => {
+		if(!err) {
+			return res.json({code: 0, num: doc.nModified});
+		}
+		return res.json({code: 0, msg: '修正失败'});
+	})
+})
+
 Router.post('/updateInfo', (req,res) => {
 	const id = req.cookies.userId;
 	const body = req.body;

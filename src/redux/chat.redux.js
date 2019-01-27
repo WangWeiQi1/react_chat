@@ -23,7 +23,9 @@ export function chat(state=defaultState,action) {
 		case MSG_RECV:
 			const n = action.data.to === action.userId ? 1 : 0;
 			return {...state, chatmsg: [...state.chatmsg, action.data], unread: state.unread + n}
-		// case MSG_READ:
+		case MSG_READ:
+			const { from, num } = action.data;
+			return {...state, chatmsg: state.chatmsg.map(item=>({...item, read: from === item.from ? true : item.read})), unread: state.unread - num}
 		default:
 			return state;
 	}
@@ -52,5 +54,16 @@ export const recvMsg = () => {
 export const sendMsg = ({from, to, msg}) => {
 	return dispatch => {
 		socket.emit('sendmsg', {from, to, msg})
+	}
+}
+
+export const readMsg = (from) => {
+	return (dispatch, getState) => {
+		axios.post('/user/readMsg',{from}).then(res => {
+			const userId = getState().user._id;
+			if(res.status === 200 && res.data.code === 0) {
+				dispatch({type: MSG_READ, data: {from, userId, num: res.data.num}})
+			}
+		})
 	}
 }
